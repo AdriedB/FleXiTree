@@ -1,7 +1,7 @@
 <!--//
 // <author>Adrie den Blanken</author>
-// <file>$Workfile: Stamboom.js $</file><date>$Date: 6-12-15 22:18 $</date>
-// <revision>$Revision: 92 $</revision><release>1.0</release>
+// <file>$Workfile: Stamboom.js $</file><date>$Date: 19-05-16 20:25 $</date>
+// <revision>$Revision: 93 $</revision><release>1.0</release>
 // <disclaimer>This software may be used as long as this
 // header stays intact. No responsibility is accepted
 // for use of this software.</disclaimer>
@@ -3307,7 +3307,7 @@ function MaakKaart(soort)
 				if (maxAantal == 1)	{var n = 30;}
 				else {var n = 20 + iAantal[i] * 30 / maxAantal;}
 				var image     = new google.maps.MarkerImage(
-					'http://gmaps-samples.googlecode.com/svn/trunk/markers/' + kleur + '/blank.png',
+					'http://maps.google.com/mapfiles/ms/micons/' + kleur + '.png',
 					new google.maps.Size(n, n), // The size
 					new google.maps.Point(0, 0), // The origin
 					new google.maps.Point(n/4, n), // The anchor
@@ -3449,7 +3449,7 @@ function MaakKaartPersoon()
 			latlng[i]    = new google.maps.LatLng(lat[plaats_ind[i]],lng[plaats_ind[i]]);
 			var n = 30;
 			var image     = new google.maps.MarkerImage(
-				'http://gmaps-samples.googlecode.com/svn/trunk/markers/' + persoon_kleur[i] + '/blank.png',
+				'http://maps.google.com/mapfiles/ms/micons/' + persoon_kleur[i] + '.png',
 				new google.maps.Size(n, n), // The size
 				new google.maps.Point(0, 0), // The origin
 				new google.maps.Point(n/4, n), // The anchor
