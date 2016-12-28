@@ -5,8 +5,8 @@
                 version="1.0">
 <!--
 // <author>Adrie den Blanken</author>
-// <file>$Workfile: Persoonskaart.xsl $</file><date>$Date: 24-10-15 14:37 $</date>
-// <revision>$Revision: 59 $</revision><release>1.0</release>
+// <file>$Workfile: Persoonskaart.xsl $</file><date>$Date: 21-06-16 10:42 $</date>
+// <revision>$Revision: 60 $</revision><release>1.0</release>
 // <disclaimer>This software may be used as long as this
 // header stays intact. No responsibility is accepted
 // for use of this software.</disclaimer>
@@ -310,37 +310,43 @@
             </xsl:for-each> <!-- BAPT -->
 
             <xsl:for-each select="DEATH">
-              <tr align="left" valign="top">
-                <td width="24%" valign="top"><xsl:value-of select="$Txt_Overlijden"/></td>
-                <td width="32%" valign="top">
-                  <xsl:value-of select="@onz"/><xsl:text> </xsl:text>
-                  <xsl:call-template name="Txt_wd">
-                    <xsl:with-param name="wd"><xsl:value-of select="@wd"/></xsl:with-param>
-                  </xsl:call-template>
-                  <xsl:text> </xsl:text><xsl:value-of select="@date"/>
-                  <xsl:if test="@time">
-                    <br /><xsl:value-of select="$Txt_om"/><xsl:text> </xsl:text><xsl:value-of select="@time"/>
-                  </xsl:if>
-                </td>
-                <td valign="top">
-                  <xsl:if test="@place">
-                  <xsl:value-of select="$Txt_te"/>
-                  </xsl:if>
-                  <xsl:value-of select="$nbsp"/>
-                </td>
-                <td width="35%" valign="top">
-                  <xsl:choose>
-                    <xsl:when test="$parToonPKKaart = 1">
-                	  <xsl:call-template name="plaatsinfo">
-                		<xsl:with-param name="plaats"><xsl:value-of select="@place"/></xsl:with-param>
-                	  </xsl:call-template>
-                	</xsl:when>
-                	<xsl:otherwise>
-                	  <xsl:value-of select="@place"/>
-                	</xsl:otherwise>
-                 </xsl:choose>
-                </td>
-              </tr>
+              <xsl:choose>
+                <xsl:when test="@ovl=1 and not(@date) and not(@place)">
+                </xsl:when>
+                <xsl:otherwise>
+                  <tr align="left" valign="top">
+                    <td width="24%" valign="top"><xsl:value-of select="$Txt_Overlijden"/></td>
+                    <td width="32%" valign="top">
+                      <xsl:value-of select="@onz"/><xsl:text> </xsl:text>
+                      <xsl:call-template name="Txt_wd">
+                        <xsl:with-param name="wd"><xsl:value-of select="@wd"/></xsl:with-param>
+                      </xsl:call-template>
+                      <xsl:text> </xsl:text><xsl:value-of select="@date"/>
+                      <xsl:if test="@time">
+                        <br /><xsl:value-of select="$Txt_om"/><xsl:text> </xsl:text><xsl:value-of select="@time"/>
+                      </xsl:if>
+                    </td>
+                    <td valign="top">
+                      <xsl:if test="@place">
+                      <xsl:value-of select="$Txt_te"/>
+                      </xsl:if>
+                      <xsl:value-of select="$nbsp"/>
+                    </td>
+                    <td width="35%" valign="top">
+                      <xsl:choose>
+                        <xsl:when test="$parToonPKKaart = 1">
+                    	  <xsl:call-template name="plaatsinfo">
+                    		<xsl:with-param name="plaats"><xsl:value-of select="@place"/></xsl:with-param>
+                    	  </xsl:call-template>
+                        </xsl:when>
+                	    <xsl:otherwise>
+                	      <xsl:value-of select="@place"/>
+                	    </xsl:otherwise>
+                     </xsl:choose>
+                    </td>
+                  </tr>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:for-each> <!-- DEATH -->
 
             <xsl:for-each select="REG[@date]">
@@ -954,7 +960,7 @@
                   <xsl:value-of select="$Txt_Bron"/>
                   </td>
                   <td colspan="3" valign="top" align="left">
-                    <xsl:value-of select="@src"/>
+                    <xsl:value-of select="@src" disable-output-escaping="yes"/>
                   </td>
               </tr>
             </xsl:if>
@@ -1851,12 +1857,12 @@
     	  <xsl:choose>
     		<xsl:when test="$scan = 1">
     		  <xsl:variable name="subject">
-    			<xsl:text>Aanvraag </xsl:text><xsl:value-of select="@link"/><xsl:text> </xsl:text><xsl:value-of select="$akte_type"/><xsl:text> </xsl:text><xsl:value-of select="$source"/>
+    			<xsl:text>Aanvraag </xsl:text><xsl:value-of select="@link"/><xsl:text> </xsl:text><xsl:value-of select="$akte_type"/><xsl:text> </xsl:text><xsl:value-of select="$source" disable-output-escaping="yes"/>
     		  </xsl:variable>
-    		  <a href="mailto:{$refOwnerEMail}?subject={$subject}"><xsl:value-of select="$source"/></a>
+    		  <a href="mailto:{$refOwnerEMail}?subject={$subject}"><xsl:value-of select="$source" disable-output-escaping="yes"/></a>
     	    </xsl:when>
     		<xsl:otherwise>
-    		  <xsl:value-of select="$source"/>
+    		  <xsl:value-of select="$source" disable-output-escaping="yes"/>
     		</xsl:otherwise>
     	  </xsl:choose>
         </td>
