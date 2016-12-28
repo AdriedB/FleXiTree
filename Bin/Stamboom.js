@@ -1,13 +1,13 @@
-<!--//
+//
 // <author>Adrie den Blanken</author>
-// <file>$Workfile: Stamboom.js $</file><date>$Date: 19-05-16 20:25 $</date>
-// <revision>$Revision: 93 $</revision><release>1.0</release>
+// <file>$Workfile: Stamboom.js $</file><date>$Date: 12-11-16 15:25 $</date>
+// <revision>$Revision: 97 $</revision><release>1.0</release>
 // <disclaimer>This software may be used as long as this
 // header stays intact. No responsibility is accepted
 // for use of this software.</disclaimer>
 //
 // See also http://www.codeproject.com/jscript/CrossBrowserJavaScript.asp
-//-->
+//
 var bookwin = null;
 var source = null;
 var stylesI= null;  // instellingen.xsl
@@ -18,18 +18,18 @@ var refPersoon= 0;
 var printOpmaak = 0;
 var svgDocument = null;
 var iFotoCnt = 0;
-var arrayPhotos    = new Array();
-var arrayPhotosAlts= new Array();
-var arrayPhotosTitles= new Array();
-var arrayPhotosW= new Array();
-var arrayPhotosH= new Array();
+var arrayPhotos    = [];
+var arrayPhotosAlts= [];
+var arrayPhotosTitles= [];
+var arrayPhotosW= [];
+var arrayPhotosH= [];
 var fotomap = ".";
 var iHistCnt = 0;
-var vorigeWhat     = new Array();
-var vorigeNaam     = new Array();
-var vorigePage     = new Array();
-var vorigeKeyword1 = new Array();
-var vorigeKeyword2 = new Array();
+var vorigeWhat     = [];
+var vorigeNaam     = [];
+var vorigePage     = [];
+var vorigeKeyword1 = [];
+var vorigeKeyword2 = [];
 var slideShowRunning = false;
 var slideShowStillShowRunning = false;
 var iSlideCounter = 0;
@@ -37,13 +37,13 @@ var iTotaalFotoCnt = 0;
 var wijzigSortering = 0;
 var startxsl = 0;
 var NodeGroepsfotos;
-var groepsfoto = new Array();
-var nr_Hotspots = new Array();
-var Hotspotleft = new Array();
-var Hotspottop = new Array();
-var Hotspotwidth = new Array();
-var Hotspotpadd = new Array();
-var Hotspottitle = new Array();
+var groepsfoto = [];
+var nr_Hotspots = [];
+var Hotspotleft = [];
+var Hotspottop = [];
+var Hotspotwidth = [];
+var Hotspotpadd = [];
+var Hotspottitle = [];
 
 var iAmFF = 0;          // FireFox
 var iAmIE = 0;          // Internet Explorer
@@ -54,7 +54,6 @@ var iAmChrome = 0;      // Google Chrome
 var iAmMetro = false;   // IE10 met Metro interface
 // SVG variabelen
 var isSVG  = false;
-//var strSVG = '';
 var strSVG = '<svg width="100%" viewBox="0 0 420 300" preserveAspectRatio="xMinYMin meet"><line x1="30" y1="30" x2="30" y2="270" style="stroke: black;" /></svg>';
 
 // Instellingsvariabelen
@@ -339,7 +338,7 @@ function KiesXSL(what,naam,keyword1,keyword2)
     case 31:  if (iAmIE) {DoToon3(naam, "Bin/GeslachtIE.xsl", keyword1, keyword2);} else {DoToon3(naam, "Bin/Geslacht.xsl", keyword1, keyword2);}; break;
     case 32:  if (iAmIE) {DoToon3(naam, "Bin/LevendIE.xsl",   keyword1, keyword2);} else {DoToon3(naam, "Bin/Levend.xsl",   keyword1, keyword2);}; break;
     case 33:  DoToon3(naam, "Bin/Overleden.xsl",keyword1, keyword2); break;
-    case 34:  if (iAmIE) {DoToon2(naam, "Bin/KalendarIE.xsl", keyword1, keyword2);} else {DoToon2(naam, "Bin/Kalendar.xsl", keyword1, keyword2);}; break;
+    case 34:  if (iAmIE) {DoToon2(naam, "Bin/KalendarIE.xsl", keyword1);} else {DoToon2(naam, "Bin/Kalendar.xsl", keyword1);}; break;
     case 35:  if (iAmIE) {DoToon3(naam, "Bin/GenealogieIE.xsl",keyword1,keyword2);} else {DoToon3(naam, "Bin/Genealogie.xsl",keyword1,keyword2);}; break;
     case 36:  DoToon3(naam, "Bin/KwartierenTekst.xsl",keyword1,keyword2); break;
     case 37:  DoToon3(naam, "Bin/StatDiagram.xsl",keyword1,keyword2); break;
@@ -483,7 +482,7 @@ function KiesXSL(what,naam,keyword1,keyword2)
     case 92:  DoToon2(naam, "Bin/KinBerekening.xsl", keyword1); break;
     case 93:  DoToon1(naam, "Bin/KinBerekeningRelaties.xsl");             break;
     case 94:  DoToon1(naam, "Bin/Diavoorstelling.xsl");
-              diavoorstelling(naam); break;
+              diavoorstelling(); break;
     case 95:  DoToon1(naam, "Bin/Memory.xsl");
               memory(naam);
               iTotaalFotoCnt = 0;    break;
@@ -616,8 +615,7 @@ function ReplaceSortKey(n, selectattr, datatypeattr, orderattr)
     var nodeAlleSorts = stylesheet.selectNodes("//xsl:sort");
     if (nodeAlleSorts != null)
     {
-      //alert( "Dit werkt, aantal xsl:sort nodes: " + nodeAlleSorts.length );
-      for (i=0;i<nodeAlleSorts.length;i++)
+      for (var i=0;i<nodeAlleSorts.length;i++)
       {
         var nodeSelect = nodeAlleSorts[i].selectSingleNode("@select");
         var nodeOrder  = nodeAlleSorts[i].selectSingleNode("@order");
@@ -753,7 +751,6 @@ function SetSortKeys(testOpVorige)
     case 11:     // Gebruikt in doopplaatsen lijst
     case 13:     // Gebruikt in overlijdensplaatsen lijst
     case 17:     // Gebruikt in begrafenisplaatsen lijst
-    case 28:     // Gebruikt in relaties lijst
       sorteerOpNaamWeergave(1);
       var date1,date2;
       if (sorteersleutel == 1)
@@ -783,28 +780,28 @@ function SetSortKeys(testOpVorige)
     case 12:    // Gebruikt in doopplaatsen lijst
     case 14:    // Gebruikt in overlijdensplaatsen lijst
     case 18:    // Gebruikt in overlijdensplaatsen lijst
-	  var date1,date2;
+	  var date3,date4;
 	  if (sorteersleutel == 2)
 	  {
-           date1 = 'BIRTH';
-           date2 = 'BAPT';
+           date3 = 'BIRTH';
+           date4 = 'BAPT';
 	  }
 	  else if (sorteersleutel == 12)
 	  {
-           date1 = 'BAPT';
-           date2 = 'BIRTH';
+           date3 = 'BAPT';
+           date4 = 'BIRTH';
 	  }
 	  else if (sorteersleutel == 14)
 	  {
-           date1 = 'DEATH';
-           date2 = 'BURI';
+           date3 = 'DEATH';
+           date4 = 'BURI';
 	  }
 	  else
 	  {
-           date1 = 'BURI';
-           date2 = 'DEATH';
+           date3 = 'BURI';
+           date4 = 'DEATH';
 	  }
-	  ReplaceSortKey(1,'concat(substring(EVENTS/'+date1+'/@date,string-length(EVENTS/'+date1+'/@date)-3,4),substring(EVENTS/'+date1+'/@date,4,2),substring(EVENTS/'+date1+'/@date,1,2),substring(EVENTS/'+date2+'/@date,string-length(EVENTS/'+date2+'/@date)-3,4),substring(EVENTS/'+date2+'/@date,4,2),substring(EVENTS/'+date2+'/@date,1,2))',null,sortorder);
+	  ReplaceSortKey(1,'concat(substring(EVENTS/'+date3+'/@date,string-length(EVENTS/'+date3+'/@date)-3,4),substring(EVENTS/'+date3+'/@date,4,2),substring(EVENTS/'+date3+'/@date,1,2),substring(EVENTS/'+date4+'/@date,string-length(EVENTS/'+date4+'/@date)-3,4),substring(EVENTS/'+date4+'/@date,4,2),substring(EVENTS/'+date4+'/@date,1,2))',null,sortorder);
 	  sorteerOpNaamWeergave(2);
 	  break;
 
@@ -813,7 +810,7 @@ function SetSortKeys(testOpVorige)
 	  ReplaceSortKey(2,'PERSONAL/@of','text',1-sortorder);
 	  ReplaceSortKey(3,'concat(substring(EVENTS/BIRTH/@date,string-length(EVENTS/BIRTH/@date)-3,4),substring(EVENTS/BIRTH/@date,4,2),substring(EVENTS/BIRTH/@date,1,2),substring(EVENTS/BAPT/@date,string-length(EVENTS/BAPT/@date)-3,4),substring(EVENTS/BAPT/@date,4,2),substring(EVENTS/BAPT/@date,1,2))','text',1-sortorder);
 	  sorteerOpNaamWeergave(4);
-      break;
+	  break;
 
    case 5:  // Gebruikt in o.a. geboorteplaatsen index
 	  ReplaceSortKey(1,'EVENTS/BIRTH/@place','text',sortorder);
@@ -886,7 +883,7 @@ function SetSortKeys(testOpVorige)
   	  break;
 
    case 27:  // Gebruikt in o.a. Laatstgewijzigd lijst
-   case 28:  // Gebruikt in o.a. Laatstgewijzigd lijst
+   case 28:  // Gebruikt in relaties lijst
           if (sorteersleutel == 27)
   	     ReplaceSortKey(1,'concat(substring(@chg,string-length(@chg)-3,4),substring(@chg,4,2),substring(@chg,1,2))','text',sortorder);
           else
@@ -1008,20 +1005,20 @@ function sorteerOpVoornaamWeergave(vanaf,extraPad)
 
 function DoTransform()
 {
-  var result;
+  var result, result1 ,result2;
+  var node1;
+  var node2;
+  var EndOfHeaderIndex1;
+  var EndOfHeaderIndex2;
+  var EndOfHeaderString1;
+  var EndOfHeaderString2;
   try
   {
     if (iAmIE)
     {
-       // alert(stylesheet.src);
        result = source.transformNode(stylesheet.XMLDocument);
     }
-    else if (iAmFF)
-    {
-      var resultDOC = xp.transformToDocument(source);
-      result = xmls.serializeToString(resultDOC);
-    }
-    else if (iAmChrome || iAmSafari)
+    else if (iAmFF || iAmChrome || iAmSafari)
     {
       var resultDOC = xp.transformToDocument(source);
       result = xmls.serializeToString(resultDOC);
@@ -1038,10 +1035,9 @@ function DoTransform()
       }
   }
 
-  if (isSVG == true)
+  if (isSVG)
   {
      strSVG = result;
-     // alert(strSVG.substring(100,500));
      isSVG = false;
   }
   else
@@ -1069,19 +1065,14 @@ function DoTransform()
 	  }
     if (iAmFF)
     {
-      // alert(result.substring(8000,10000));
-//      result = result.replace(/&lt;br\/&gt;/g, "<br/>");
-//      result = result.replace(/&lt;a /g, "<a ");
-//      result = result.replace(/&lt;\/a&gt;/g, "</a>");
-//      result = result.replace(/\"&gt;/g, "\">");
         result1 = result1.replace(/&lt;/g, "<");
         result1 = result1.replace(/&gt;/g, ">");
         result2 = result2.replace(/&lt;/g, "<");
         result2 = result2.replace(/&gt;/g, ">");
 
-      var node1 = document.getElementById("showHeader");
+      node1 = document.getElementById("showHeader");
       node1.innerHTML = result1;
-      var node2 = document.getElementById("showBody");
+      node2 = document.getElementById("showBody");
       node2.innerHTML = result2;
     }
     else if (iAmIE)
@@ -1091,9 +1082,9 @@ function DoTransform()
     }
     else if (iAmChrome || iAmSafari)
     {
-      var node1 = document.getElementById("showHeader");
+      node1 = document.getElementById("showHeader");
       node1.innerHTML = result1;
-      var node2 = document.getElementById("showBody");
+      node2 = document.getElementById("showBody");
       node2.innerHTML = result2;
 	}
   }
@@ -1109,7 +1100,7 @@ function IEImportStylesheet(stylesheetName)
     stylesheet.load(stylesheetName);
     if (stylesheet.parseError.errorCode != 0)
     {
-      result = reportParseError(stylesheet.parseError);
+      var result = reportParseError(stylesheet.parseError);
       showHeader.innerHTML = result;
       return 1;
     }
@@ -1128,11 +1119,11 @@ function FireFoxImportStylesheet(stylesheetName)
       stylesheet.validateOnParse=true;
       stylesheet.load(stylesheetName);
       SetSortKeys(1);                  // Sortering aanpassen
-      nresult = xp.importStylesheet(stylesheet);
+      xp.importStylesheet(stylesheet);
     }
     catch (exception)
     {
-      result = "Fout tijdens importStylesheet: " + (exception.description?exception.description:exception.message);
+      var result = "Fout tijdens importStylesheet: " + (exception.description?exception.description:exception.message);
       alert(result);
       var node = document.getElementById("showHeader");
       if (result.indexOf("Access to restricted URI denied") > 0)    // "NS_ERROR_DOM_BAD_URI"
@@ -1157,11 +1148,11 @@ function ChromeImportStylesheet(stylesheetName)
        xmlhttp.send(null); 
        stylesheet = xmlhttp.responseXML.documentElement; 
       SetSortKeys(1);                  // Sortering aanpassen
-      nresult = xp.importStylesheet(stylesheet);
+      xp.importStylesheet(stylesheet);
     }
     catch (exception)
     {
-      result = "Fout tijdens importStylesheet: " + (exception.description?exception.description:exception.message);
+      var result = "Fout tijdens importStylesheet: " + (exception.description?exception.description:exception.message);
       alert(result);
       var node = document.getElementById("showHeader");
       if (result.indexOf("Access to restricted URI denied") > 0)    // "NS_ERROR_DOM_BAD_URI"
@@ -1200,10 +1191,9 @@ function getParameter(parameter, waarde)
 {
   if (iAmIE)
   {
-    node = stylesI.selectSingleNode("//xsl:variable[@name='" + parameter + "']");
+    var node = stylesI.selectSingleNode("//xsl:variable[@name='" + parameter + "']");
     if (node)
     {
-      //alert(parameter + '=' + node.text;
       return node.text;
     }
   }
@@ -1212,14 +1202,13 @@ function getParameter(parameter, waarde)
     var nodeAlleSorts = stylesI.selectNodes("//xsl:variable[@name='" + parameter + "']");
     if (nodeAlleSorts != null)
     {
-      for (i=0;i<nodeAlleSorts.length;i++)
+      for (var i=0;i<nodeAlleSorts.length;i++)
       {
         var nodeSelect = nodeAlleSorts[i].selectSingleNode("@name");
         if (nodeSelect)
         {
            if (nodeSelect.nodeValue == parameter)
            {
-              //alert(nodeSelect.nodeValue + '=' + nodeAlleSorts[i].textContent);
               return nodeAlleSorts[i].textContent;
            }
         }
@@ -1278,7 +1267,7 @@ function VorigeKaart()
         vorigeWhat[iNextHistCnt] != 27 && 
         vorigeWhat[iNextHistCnt] != 60 && 
         vorigeWhat[iNextHistCnt] != 62 && 
-        vorigeWhat[iNextHistCnt] != 64 && 
+        vorigeWhat[iNextHistCnt] != 64 &&
         vorigeWhat[iNextHistCnt] != 66 && 
         vorigeWhat[iNextHistCnt] != 94 && 
         vorigeWhat[iNextHistCnt] != 96 && 
@@ -1297,12 +1286,14 @@ function VorigeKaart()
 
 function ToonResultaat(strResult)
 {
-  // alert(result.substring(8000,10000));
-	  EndOfHeaderString1 = '"EndOfHeader"';
-	  EndOfHeaderIndex1 = strResult.indexOf(EndOfHeaderString1);
+	  var result1, result2;
+	  var EndOfHeaderIndex2;
+	  var EndOfHeaderString2 = "";
+	  var EndOfHeaderString1 = '"EndOfHeader"';
+	  var EndOfHeaderIndex1 = strResult.indexOf(EndOfHeaderString1);
 	  if (EndOfHeaderIndex1 != -1)
 	  {
-	  	EndOfHeaderString2 = '</div>';
+	  	EndOfHeaderString2 = "</div>";
 	  	EndOfHeaderIndex2 = strResult.substr(EndOfHeaderIndex1).indexOf(EndOfHeaderString2);
 	  }
 	  else
@@ -1335,7 +1326,7 @@ function ToonResultaat(strResult)
 
 function ToonPersoonsKaart(naam)
 {
-  KiesXSL(7,naam,'','',null,0);
+  KiesXSL(7,naam,'','');
 }
 
 //  =========================== Einde Stylesheet afhandeling =====================
@@ -1349,6 +1340,7 @@ function ToonPersoonsKaart(naam)
 
 function laden(startPersoon)
 {
+  var xmlhttp;
   // Browser detectie
   var ua = navigator.userAgent.toLowerCase();
   if (ua.indexOf('opera/') != -1)
@@ -1358,22 +1350,10 @@ function laden(startPersoon)
   else if (ua.indexOf('chrome/') != -1)
   {
      iAmChrome = 1;
-//     alert("Google Chrome ondersteunt de hier gebruikte functionaliteit helaas nog niet!");
-     // source.load(xml_bestand) wordt nog niet ondersteund, wel native xml/xslt translatie
-     // via de xsl die in de xml gekoppeld is. Open hiervoor rechtstreeks stamboom.xml
-//     alert("Hierna wordt alleen een complete personenlijst getoond in een nieuw scherm!");
-//     window.location=xml_bestand;
-//     return;
   }
   else if (ua.indexOf('safari/') != -1)
   {
      iAmSafari = 1;
-//     alert("Apple Safari ondersteunt de hier gebruikte functionaliteit helaas nog niet!");
-     // XML/XSL transformaties worden nog niet ondersteund, wel native xml/xslt translatie
-     // via de xsl die in de xml gekoppeld is. Open hiervoor rechtstreeks stamboom.xml
-//     alert("Hierna wordt alleen een complete personenlijst getoond in een nieuw scherm!");
-//     window.location=xml_bestand;
-//     return;
   }
 
   if (window.ActiveXObject)
@@ -1418,7 +1398,7 @@ function laden(startPersoon)
   }
   if (iAmChrome || iAmSafari)
   {
-       var xmlhttp = new window.XMLHttpRequest(); 
+       xmlhttp = new window.XMLHttpRequest(); 
        xmlhttp.open("GET","instellingen.xml",false); 
        xmlhttp.send(null); 
        source = xmlhttp.responseXML.documentElement; 
@@ -1429,7 +1409,6 @@ function laden(startPersoon)
   {
     if (source.parseError.errorCode != 0)
     {
-      // result = reportParseError(source.parseError);
       showHeader.innerHTML = "Fout bij inlezen van instellingen.xml";
       return;
     }
@@ -1440,7 +1419,7 @@ function laden(startPersoon)
     source.load(xml_bestand);
   if (iAmChrome || iAmSafari)
   {
-       var xmlhttp = new window.XMLHttpRequest(); 
+       xmlhttp = new window.XMLHttpRequest(); 
        xmlhttp.open("GET",xml_bestand,false); 
        xmlhttp.send(null); 
        source = xmlhttp.responseXML.documentElement; 
@@ -1449,7 +1428,6 @@ function laden(startPersoon)
   {
     if (source.parseError.errorCode != 0)
     {
-      // result = reportParseError(source.parseError);
       showHeader.innerHTML = "Fout bij inlezen van " + xml_bestand;
       return;
     }
@@ -1477,7 +1455,6 @@ function laden(startPersoon)
   // naar deze persoon in de stamboom
   if (startPersoon > 0)
   {
-     // alert(startPersoon);
      strBeginPersoon = startPersoon;
      startxsl = 1;
   }
@@ -1494,49 +1471,7 @@ function laden(startPersoon)
   }
   else
   {
-    if (iAmFF)
-    {
-		if(startxsl == 0)
-		{
-    		vorigeWhat[iHistCnt]     = 27
-			KiesXSL(27,strBeginPersoon,'','')
-		}
-		else
-		{
-    		vorigeWhat[iHistCnt]     = 7
-			KiesXSL(7,strBeginPersoon,'','')
-		}
-    }
-    else if (iAmIE)
-    {
-      // Nodig in geval van nood // strBeginPersoon = refPersoon;
-//      ToonPersoon1(strBeginPersoon);
-//      iHistCnt++
-		if(startxsl == 0)
-		{
-    		vorigeWhat[iHistCnt]     = 27
-			KiesXSL(27,strBeginPersoon,'','')
-		}
-		else
-		{
-    		vorigeWhat[iHistCnt]     = 7
-			KiesXSL(7,strBeginPersoon,'','')
-		}
-    }
-    else if (iAmSafari)
-    {
-		if(startxsl == 0)
-		{
-    		vorigeWhat[iHistCnt]     = 27
-			KiesXSL(27,strBeginPersoon,'','')
-		}
-		else
-		{
-    		vorigeWhat[iHistCnt]     = 7
-			KiesXSL(7,strBeginPersoon,'','')
-		}
-    }
-    else if (iAmChrome)
+    if (iAmFF || iAmIE || iAmSafari || iAmChrome)
     {
 		if(startxsl == 0)
 		{
@@ -1667,7 +1602,7 @@ function HaalCookiesOp()
   feitenweergave =      HaalCookieOp("LaatsteFeitenweergave", 1, feitenweergave);
   voettekstweergave =   HaalCookieOp("LaatsteVoettekstweergave", stuurfooter, voettekstweergave);
   pkvoettekstweergave = HaalCookieOp("LaatstePKVoettekstweergave", stuurfooter, pkvoettekstweergave);
-  foto_tmp =            HaalCookieOp("LaatsteFotoAantal", 1, fotoaantal);
+  var foto_tmp =        HaalCookieOp("LaatsteFotoAantal", 1, fotoaantal);
   if ((foto_tmp == 3) && (max_nr_photos_pp == 1))
   {
 	  fotoaantal = 2;
@@ -1728,11 +1663,12 @@ function HaalCookiesOp()
 
 function WijzigInstellingen()
 {
+  var i;
   if (document.form2.voornaam != null)
   {
 	for (i = 0; i != document.form2.voornaam.length; i++)
 	{
-		if (document.form2.voornaam[i].checked == true)
+		if (document.form2.voornaam[i].checked)
 		{
 			voornaamweergave= i ? 2 : 1;
     			setParameter("parToonVoornaam",voornaamweergave+'');
@@ -1743,7 +1679,7 @@ function WijzigInstellingen()
   {
 	for (i = 0; i != document.form2.naam.length; i++)
   	{
-      		if (document.form2.naam[i].checked == true)
+      		if (document.form2.naam[i].checked)
       		{
            		naamweergave = i ? 2 : 1;
     			setParameter("parToonNaam",naamweergave+'');
@@ -1784,7 +1720,7 @@ function WijzigInstellingen()
   {
 	for (i = 0; i != document.form2.sorteren.length; i++)
   	{
-      		if (document.form2.sorteren[i].checked == true)
+      		if (document.form2.sorteren[i].checked)
       		{
            		sorteersleutel = i + 1;
     			setParameter("parSortKey",sorteersleutel+'');
@@ -1795,7 +1731,7 @@ function WijzigInstellingen()
   {
 	for (i = 0; i != document.form2.fotos.length; i++)
   	{
-      		if (document.form2.fotos[i].checked == true)
+      		if (document.form2.fotos[i].checked)
       		{
            		fotoaantal = i + 1;
     			setParameter("parFotoAantal",fotoaantal+'');
@@ -1806,7 +1742,7 @@ function WijzigInstellingen()
   {
 	for (i = 0; i != document.form2.diavolgorde.length; i++)
   	{
-      		if (document.form2.diavolgorde[i].checked == true)
+      		if (document.form2.diavolgorde[i].checked)
       		{
            		diaweergave = i ? 2 : 1;
     			setParameter("parDiaVolgorde",diaweergave+'');
@@ -1822,7 +1758,7 @@ function WijzigInstellingen()
   {
 	for (i = 0; i != document.form2.kolommen.length; i++)
   	{
-      		if (document.form2.kolommen[i].checked == true)
+      		if (document.form2.kolommen[i].checked)
       		{
            		nrkolommen = i ? 2 : 1;
     			setParameter("parNrKol",nrkolommen+'');
@@ -1838,7 +1774,7 @@ function WijzigInstellingen()
   {
 	for (i = 0; i != document.form2.sortnaam.length; i++)
   	{
-      		if (document.form2.sortnaam[i].checked == true)
+      		if (document.form2.sortnaam[i].checked)
       		{
            		sortnaamweergave = i ? 2 : 1;
     			setParameter("parToonSortnaam",sortnaamweergave+'');
@@ -1873,13 +1809,6 @@ function WijzigInstellingen()
   }
   VorigeKaart()
 }
-
-//function function3() {
-//  document.all.Layer1.style.cursor = "wait";
-//}
-//function function4() {
-//  document.all.Layer1.style.cursor = "default";
-//}
 
 function WijzigTaal(NieuweTaal,naam)
 {
@@ -1924,16 +1853,16 @@ function Zoeken()
   setParameter("parSortKey",sorteersleutel);
   setParameter("parSortOrder",sortorder ? 'aflopend' : 'oplopend');
 
-  for (i = 0; i != document.form1.enof.length; i++)
+  for (var i = 0; i != document.form1.enof.length; i++)
   {
-    if (document.form1.enof[i].checked == true)
+    if (document.form1.enof[i].checked)
     {
         setParameter("EnOF", i ? "EN" : "OF");
     }
   }
   for (i = 0; i != document.form1.exact.length; i++)
   {
-    if (document.form1.exact[i].checked == true)
+    if (document.form1.exact[i].checked)
     {
       setParameter("Exact", i ? "Nee" : "Ja");
     }
@@ -1962,7 +1891,7 @@ function fotoarray(naam)
     if (nodePhotos.hasChildNodes())
     {
       var nodePhoto = nodePhotos.firstChild;
-      for(;;)
+      while (true)
       {
 	    if (nodePhoto.nodeType == 1)	// Chrome / Safari heeft een text-node tussen elk tweetal opvolgende nodes in de xml-file; de echte nodes hebben nodeType = 1
 	    {
@@ -2015,7 +1944,7 @@ function fotoarray(naam)
 
 function nextPhoto(naam)
 {
-  for (i=0;i<iFotoCnt;i++)
+  for (var i=0;i<iFotoCnt;i++)
   {
     if (document.images.afbeelding.src.match('/' + arrayPhotos[i]))
     {
@@ -2035,7 +1964,7 @@ function nextPhoto(naam)
 
 function prevPhoto(naam)
 {
-  for (i=0;i<iFotoCnt;i++)
+  for (var i=0;i<iFotoCnt;i++)
   {
     if (document.images.afbeelding.src.match('/' + arrayPhotos[i]))
     {
@@ -2116,7 +2045,7 @@ function OpenFoto (naam, nummer)
   var nr_tekst_regels = Math.ceil(pix_per_letter * titel.length / venster_breedte) + 2;
   venster_hoogte = img_hoogte + tekst_hoogte * nr_tekst_regels + marge_y;
   var is_groepsfoto = false;
-  for (i=0;i<NodeGroepsfotos.length;i++)
+  for (var i=0;i<NodeGroepsfotos.length;i++)
   {
 	  if (groepsfoto[i] == arrayPhotos[nummer])
 	  {
@@ -2130,8 +2059,8 @@ function OpenFoto (naam, nummer)
 	url_img.src = bookgif;
 	var url_breedte = url_img.width;
 	var url_hoogte = url_img.height;
-	breedte_factor = url_breedte / breedte;
-	hoogte_factor = url_hoogte / hoogte;
+	var breedte_factor = url_breedte / breedte;
+	var hoogte_factor = url_hoogte / hoogte;
 	bookWindow=open('','_blank',"top=10 ,left=10 ,toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=1,resizable=1,width="+(1*url_breedte+40)+",height="+(1*url_hoogte+160));
 	bookWindow.document.open();
 	bookWindow.document.writeln('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"');
@@ -2209,7 +2138,7 @@ function nr_photos_pp()
 // bepaalt of er minstens 1 persoon is met meer dan 1 foto; dit ivm instelling weergave aantal foto's
 {
 	var nodePhotos = source.selectNodes("//PERSOON/PERSONAL/PHOTOS");
-	for (i=0;i<nodePhotos.length;i++)
+	for (var i=0;i<nodePhotos.length;i++)
 	{
 		var nodePhoto = nodePhotos[i].selectNodes("PHOTO");
 		if (nodePhoto != null)
@@ -2227,23 +2156,23 @@ function lees_groepsfotos()
 {
   NodeGroepsfotos = source.selectNodes("//GROEPSFOTOS/FOTO");
   groepsfoto.length = 0;
-  for (i=0;i<NodeGroepsfotos.length;i++)
+  for (var i=0;i<NodeGroepsfotos.length;i++)
   {
     groepsfoto[i] = NodeGroepsfotos[i].getAttribute("name");
   }
   for (i=0;i<NodeGroepsfotos.length;i++)
   {
-    nodeMap = source.selectSingleNode("//GROEPSFOTOS/FOTO[@name='" + groepsfoto[i] + "']");
+    var nodeMap = source.selectSingleNode("//GROEPSFOTOS/FOTO[@name='" + groepsfoto[i] + "']");
 	if (nodeMap.hasChildNodes())
 	{
 		var Hotspot = nodeMap.firstChild;
-		indx_tmp=0;
-		Hotspotleft[i] = new Array();
-		Hotspottop[i] = new Array();
-		Hotspotwidth[i] = new Array();
-		Hotspotpadd[i] = new Array();
-		Hotspottitle[i] = new Array();
-		for(;;)
+		var indx_tmp=0;
+		Hotspotleft[i] = [];
+		Hotspottop[i] = [];
+		Hotspotwidth[i] = [];
+		Hotspotpadd[i] = [];
+		Hotspottitle[i] = [];
+		while (true)
 		{
 		  if (Hotspot.nodeType == 1)	// Chrome / Safari heeft een text-node tussen elk tweetal opvolgende nodes in de xml-file; de echte nodes hebben nodeType = 1
 		  {
@@ -2289,26 +2218,26 @@ function GeenFunctie()
 
 function getCookie(name)
 {
-  arg=name+"=";
-  i=0;
+  var arg=name+"=";
+  var i=0;
   while(i<document.cookie.length)
   {
-    j=i+arg.length;
+    var j=i+arg.length;
     if(document.cookie.substring(i,j)==arg)
     {
-      endstr=document.cookie.indexOf(";",j);
-      if(endstr==-1)endstr=document.cookie.length;
+      var endstr=document.cookie.indexOf(";",j);
+      if(endstr == -1)endstr=document.cookie.length;
       return unescape(document.cookie.substring(j,endstr));
     }
     i=document.cookie.indexOf(" ", i)+1;
-    if (i==0)break;
+    if (i == 0)break;
   }
   return null;
 }
 
 function setCookie(name,value)
 {
-  if(value!=null&&value!="")
+  if(value != null && value != "")
   {
     var today=new Date();var expiry=new Date(today.getTime()+31536000000);
     document.cookie=name+"="+escape(value)+";expires="+expiry.toGMTString()+";path=/";
@@ -2317,7 +2246,6 @@ function setCookie(name,value)
 
 function muisOver(x)
 {
-  // eval("veld" + x + "b.style.visibility = 'visible'");
   document.getElementById("veld" + x + "b").style.visibility = "visible";
 }
 function muisUit(x)
@@ -2333,7 +2261,7 @@ function selectSingleNode(d,x,c)
   x = xpath
   c = context node
   */
-  var s,i,n;
+  var s;
   if(typeof d.evaluate != "undefined")
   {
     c = (c ? c : d.documentElement);
@@ -2399,7 +2327,6 @@ function inlineSVGloadSVG()
         source.validateOnParse=true;
         source.resolveExternals=true;
         source.loadXML(strSVG);
-        // var nodeXslSvg = source.selectSingleNode("//text[@id='anm-2']");
         var anodes = source.selectNodes("//text");
         for (var i=0; i < anodes.length; i++)
         {
@@ -2417,7 +2344,7 @@ function inlineSVGloadSVG()
       catch(e)
       {
 	      // Er is iets fout gegaan
-	  }
+      }
     }
   }
 
@@ -2441,48 +2368,12 @@ function SVGloadSVG()
   {
       var node = document.getElementById("SVGEmbedIDAVJTVB");
       alert(node);
-      //svgDocument = node.getSVGDocument();  // null
-      //svgDocument = node.documentElement;   // undefined
       return;
 
-      // Hieronder staat nog wat test code voor FireFox.
+      // Hieronder stond nog wat test code voor FireFox.
       // Helaas werk dat nog niet omdat het niet lukt om de de svg in het emebd statement tekomen.
       // In IE gaat dit via getSVGDocument(), in FireFox is het me nog niet gelukt. En dat is wel
       // jammer wat dit is nodig om de namen in de svg te krijgen.
-      var oParser = new DOMParser();
-      source = oParser.parseFromString(strSVG,"text/xml");
-      var oEvaluator = new XPathEvaluator();
-      var oResult = oEvaluator.evaluate("//text",
-      source.documentElement, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
-      if (oResult != null) {
-      var oElement = oResult.iterateNext();
-      var i = 0;
-      while(oElement) {
-              //alert(oElement.tagName);
-              //alert(oElement.textContent);
-            var textId = oElement.getAttribute("id");
-            if (i < 2)
-                alert(textId);
-            var node   = document.getElementById(textId);
-            if (node == null)
-            {
-               node = document.all[textId];
-            if (i < 2)
-            {
-               if (node == null)
-                  alert("node=null");
-               else
-                  alert(node);
-            }
-            }
-            i++;
-            if (node != null)
-            {
-              // node.getChildNodes().item(0).nodeValue=anodes(i).text;
-            }
-            oElement = oResult.iterateNext();
-          }
-      }
   }
 }
 
@@ -2508,7 +2399,7 @@ function loadSVG(imageXML, embedID)
 
 function getDOMFromXML(XML)
 {
-   DOM = new ActiveXObject('Msxml2.FreeThreadedDOMDocument',null,0);
+   var DOM = new ActiveXObject('Msxml2.FreeThreadedDOMDocument',null,0);
    DOM.async = false;
    DOM.validateOnParse = false;
    DOM.loadXML(XML);
@@ -2527,25 +2418,24 @@ function getDOMFromXML(XML)
 // run_slide_show
 // diavoorstelling
 
-var Pic_name = new Array();
-var Pic_title = new Array();
-var Pic_width = new Array();
-var Pic_height = new Array();
-var Pic_tekst = new Array();
-var Pic_rnd_name = new Array();
-var Pic_rnd_title = new Array();
-var Pic_rnd_tekst = new Array();
+var Pic_name = [];
+var Pic_title = [];
+var Pic_width = [];
+var Pic_height = [];
+var Pic_tekst = [];
+var Pic_rnd_name = [];
+var Pic_rnd_title = [];
+var Pic_rnd_tekst = [];
 var Pic_path = "";
 var slideShowSpeed;
 var imgSlideHeight = 600;
 var crossFadeDuration = 5;
-var preLoad = new Array();
+var preLoad = [];
 
 function laad_fotos()
 {
   iTotaalFotoCnt = 0;
 
-  var nodePhotos;
   var nodeAllePhotos = source.selectNodes("//PERSOON/PERSONAL/PHOTOS/PHOTO");
   var ThisLink = 0;
   for(var i=0;i<nodeAllePhotos.length;i++)
@@ -2556,7 +2446,7 @@ function laad_fotos()
     var nodeNick = nodeAllePhotos[i].selectSingleNode("../../NAME/@nick");
     var nodePref = nodeAllePhotos[i].selectSingleNode("../../NAME/@pref");
     var nodeSurn = nodeAllePhotos[i].selectSingleNode("../../NAME/@surn");
-    LastLink = ThisLink;
+    var LastLink = ThisLink;
     ThisLink = nodeLink.nodeValue;
     if (((fotoaantal == 2) && (ThisLink != LastLink)) || (fotoaantal == 3))
     {
@@ -2630,8 +2520,8 @@ function foto_volgorde()
   var i;
   var nrfnd;
   var willekeurig=(diaweergave == 1);
-  var fnd = new Array();
-  var indx = new Array();
+  var fnd = [];
+  var indx = [];
 
 	for (i=0;i<iTotaalFotoCnt;i++)
 	{
@@ -2643,8 +2533,8 @@ function foto_volgorde()
 		nrfnd=0;
 		while (nrfnd<iTotaalFotoCnt)
 		{
-			x=Math.random();
-			y=Math.floor(iTotaalFotoCnt*x);
+			var x=Math.random();
+			var y=Math.floor(iTotaalFotoCnt*x);
 
 			if (!(fnd[y]))
 			{
@@ -2680,8 +2570,6 @@ function foto_volgorde()
 function haal_foto_path_op()
 {
     Pic_path = document.images.SlideShow.src;
-    //document.images.SlideShow.src = Pic_path + Pic_rnd_name[0];
-    //document.images.SlideShow.text=Pic_rnd_title[0] + "<br /><br />" + Pic_rnd_tekst[0];
     return;
 }
 
@@ -2720,7 +2608,6 @@ function run_slide_show()
 	{
 		document.images.SlideShow.text += "<br /><br />" + Txt_doorgaantekst(taal);
 	}
-//	document.images.SlideShow.alt=Pic_rnd_title[iSlideCounter];
 	document.images.SlideShow.height=imgSlideHeight;
 
 	if (document.all)
@@ -2759,13 +2646,13 @@ function stop_resume_slideshow(e)
 		var evtobj=window.event? event : e //distinguish between IE's explicit event object (window.event) and Firefox's implicit.
 		var unicode=evtobj.charCode? evtobj.charCode : evtobj.keyCode
 		var actualkey=String.fromCharCode(unicode)
-		if (actualkey==" ")
+		if (actualkey == " ")
 		{
 			stop_resume_id = 1 - stop_resume_id;
 			if (stop_resume_id == 1)
 			{
 				clearTimeout(SlideShowTimeOut);
-				foto_nr = iSlideCounter-1;
+				var foto_nr = iSlideCounter-1;
 				if (foto_nr == -1)
 				{
 					foto_nr = iTotaalFotoCnt-1;
@@ -2784,7 +2671,7 @@ function stop_resume_slideshow(e)
 	}
 }
 
-function diavoorstelling(naam)
+function diavoorstelling()
 {
 //  bij eerste aanroep of na wijziging instellingen opnieuw laden; bij wijziging van 1 naar alle foto's of omgekeerd kan het aantal foto's veranderen
     if (iTotaalFotoCnt == 0)
@@ -2820,21 +2707,22 @@ function diavoorstelling(naam)
 // ============================= Einde code voor Diavoorstelling ============
 
 // ============================= code voor FotoMemory ============
-var gevonden = new Array();
-var aangeklikt = new Array();
+var gevonden = [];
+var aangeklikt = [];
 var nr_rows = 6;
 var nr_col = 6;
 var nr_aangeklikt = 0;
-var aanklik_index = new Array();
-var Pic_memory_name = new Array();
-var Pic_memory_width = new Array();
-var Pic_memory_height = new Array();
-var Pic_memory_tekst = new Array();
-var Pic_rnd_memory_name = new Array();
-var Pic_rnd_memory_width = new Array();
-var Pic_rnd_memory_height = new Array();
-var Pic_rnd_memory_tekst = new Array();
+var aanklik_index = [];
+var Pic_memory_name = [];
+var Pic_memory_width = [];
+var Pic_memory_height = [];
+var Pic_memory_tekst = [];
+var Pic_rnd_memory_name = [];
+var Pic_rnd_memory_width = [];
+var Pic_rnd_memory_height = [];
+var Pic_rnd_memory_tekst = [];
 var te_weinig_fotonamen;
+var nr_foto_namen;
 var nr_pogingen;
 var nr_goed;
 var memory_duur = 2000;
@@ -2870,11 +2758,12 @@ function memory(naam)
 
 function initialize_memory()
 {
+	nr_foto_namen = 0;
 	nr_pogingen = 0;
 	nr_goed = 0;
-	for (i=1;i<=nr_rows;i++)
+	for (var i=1;i<=nr_rows;i++)
 	{
-		for (j=1;j<=nr_col;j++)
+		for (var j=1;j<=nr_col;j++)
 		{
 			gevonden[(i-1)*nr_col + j] = false;
 			aangeklikt[(i-1)*nr_col + j] = false;
@@ -2886,18 +2775,18 @@ function haal_foto_path_memory_op()
 {
 	var nodeToon = source.selectSingleNode("//INSTELLINGEN/TOON");
 	var nodeFotoPath = selectSingleNode(source,"@fotofolder",nodeToon);
-    Pic_path = nodeFotoPath.nodeValue + "/";
-    return;
+	Pic_path = nodeFotoPath.nodeValue + "/";
+	return;
 }
 
 function maak_random_foto_paren()
 {
-	var gekozen = new Array();
-	var name_assigned = new Array();
-	nr_foto_namen = 0;
-	for (i=0;i<iTotaalFotoCnt;i++)
+	var j;
+	var gekozen = [];
+	var name_assigned = [];
+	for (var i=0;i<iTotaalFotoCnt;i++)
 	{
-		dubbel = false;
+		var dubbel = false;
 		for (j=1;j<=nr_foto_namen;j++)
 		{
 			if (Pic_memory_name[j] == Pic_name[i])
@@ -2923,7 +2812,7 @@ function maak_random_foto_paren()
 	{
 		gekozen[i] = false;
 	}
-	nr_assigned = 0;
+	var nr_assigned = 0;
 	for (i=1;i<=nr_rows;i++)
 	{
 		for (j=1;j<=nr_col;j++)
@@ -2933,9 +2822,10 @@ function maak_random_foto_paren()
 	}
 	while (nr_assigned < nr_rows * nr_col)
 	{
+		var al_gekozen;
 		do
 		{
-			k = rnd(nr_foto_namen);
+			var k = rnd(nr_foto_namen);
 			al_gekozen = (gekozen[k])
 		}
 		while (al_gekozen)
@@ -2977,11 +2867,11 @@ function run_memory(naam,met_href)
 
 function maak_memory_tabel(naam,met_href)
 {
-	txt = Txt_FotoMemory(taal) + '<br /><br /><table style="font-size:10pt; cell-padding:0">';
-	for (i=1;i<=nr_rows;i++)
+	var txt = Txt_FotoMemory(taal) + '<br /><br /><table style="font-size:10pt; cell-padding:0">';
+	for (var i=1;i<=nr_rows;i++)
 	{
 		txt+="<tr>";
-		for (j=1;j<=nr_col;j++)
+		for (var j=1;j<=nr_col;j++)
 		{
 			txt+='<td style="width:6em; height:6em; background-color:blue; text-align:center;">';
 			if (gevonden[(i-1)*nr_col + j] || aangeklikt[(i-1)*nr_col + j])
@@ -3063,7 +2953,7 @@ function maak_memory_tabel(naam,met_href)
 		}
 		if (nr_min > 1)
 		{
-			txt+= nr_min + ' ' + Txt_minuten(taal) + ' ' + Txt_en(taal) + ' ';;
+			txt+= nr_min + ' ' + Txt_minuten(taal) + ' ' + Txt_en(taal) + ' ';
 		}
 		txt+= nr_sec + ' ' + Txt_seconde(taal) + ' ';
 	}
@@ -3149,7 +3039,7 @@ function isBrowserSupportPlugin() {
     } catch (e) {
         supported = false;
     }
-    if(errorName != 'ReferenceError' && supported==false){
+    if(errorName != 'ReferenceError' && !supported){
         supported = false;
     }else {
         supported =true;
@@ -3196,21 +3086,15 @@ function MaakKaart(soort)
 		kaartGeladen = true;
 	}
 	var latlng = [];
-	var enkelvoud;
-	var meervoud;
 	var gebeurtenis;
 	var iAantal = [];
-	var iaantalmax = 0;
-	var ilatmax = 0;
-	var ilatmin = 0;
-	var ilngmax = 0;
-	var ilngmin = 0;
 	var iAantalPos = 0;
 	var latmax = -1000;
 	var latmin = 1000;
 	var lngmax = -1000;
 	var lngmin = 1000;
 	var maxAantal = 0;
+	var kleur;
 
 	for (var i = 0; i < plaatsen.length; i++)
 	{
@@ -3224,11 +3108,11 @@ function MaakKaart(soort)
 		if (iAantal[i] > 0 ) { iAantalPos ++; }
 		if (iAantal[i] > 0)
 		{
-			if (iAantal[i] > maxAantal)	{iaantalmax = i; maxAantal = iAantal[i];}
-			if (lat[i] > latmax) {ilatmax = i; latmax = lat[i];}
-			if (lat[i] < latmin) {ilatmin = i; latmin = lat[i];}
-			if (lng[i] > lngmax) {ilngmax = i; lngmax = lng[i];}
-			if (lng[i] < lngmin) {ilngmin = i; lngmin = lng[i];}
+			if (iAantal[i] > maxAantal)	{maxAantal = iAantal[i];}
+			if (lat[i] > latmax) {latmax = lat[i];}
+			if (lat[i] < latmin) {latmin = lat[i];}
+			if (lng[i] > lngmax) {lngmax = lng[i];}
+			if (lng[i] < lngmin) {lngmin = lng[i];}
 		}
 	}
 	switch(soort)
@@ -3271,7 +3155,7 @@ function MaakKaart(soort)
 		plaatsmap.fitBounds(latlngb);
 		var nr_pos = 0;
 
-		for (var i = 0; i < plaatsen.length; i++)
+		for (i = 0; i < plaatsen.length; i++)
 		{
 			if (iAantal[i] > 0)
 			{
@@ -3302,10 +3186,10 @@ function MaakKaart(soort)
 					htmls[i] += ' ' + Txt_zijn(taal);
 				}
 				htmls[i] += ' ' + gebeurtenis + ' ' + Txt_in(taal) + ' ' + plaatsnaam[i];
-				var label     = plaatsnaam[i] + ' (' + iAantal[i] + ')';
 				latlng[i]    = new google.maps.LatLng(lat[i],lng[i]);
-				if (maxAantal == 1)	{var n = 30;}
-				else {var n = 20 + iAantal[i] * 30 / maxAantal;}
+				var n;
+				if (maxAantal == 1) { n = 30;}
+				else { n = 20 + iAantal[i] * 30 / maxAantal;}
 				var image     = new google.maps.MarkerImage(
 					'http://maps.google.com/mapfiles/ms/micons/' + kleur + '.png',
 					new google.maps.Size(n, n), // The size
@@ -3315,12 +3199,13 @@ function MaakKaart(soort)
 				);
 				var marker    = new google.maps.Marker({position: latlng[i], map: plaatsmap, title: htmls[i], icon:image});
 				gmarkers[i]   = marker;
-				(function(i, marker) {
+				(function(i)
+					{
 					google.maps.event.addListener(gmarkers[i], 'click', function() {
 						var infowindow = new google.maps.InfoWindow({content: htmls[i]});
 						infowindow.open(plaatsmap, gmarkers[i]);
 						});
-					})(i, marker);
+					})(i);
 			}
 		}
 	}
@@ -3337,6 +3222,18 @@ function KaartPersoon(naam)
 	MaakKaartPersoon();
 }
 
+function AddPlaatsPersoon(plaats, indx, kleur)
+{
+   	if (plaats != null)
+        {
+           if (VindPlaatsnaam(plaats.nodeValue,indx))
+           {
+              persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = kleur; indx ++;
+           }
+        }
+   	return indx;
+}
+
 function HaalGegevensPersoonsplaatsen(naam)
 {
 	plaats_ind.length = 0;
@@ -3344,46 +3241,49 @@ function HaalGegevensPersoonsplaatsen(naam)
 	persoon_plaatsen.length = 0;
 	persoon_kleur.length = 0;
 	var indx = 0;
-	var nodePersoon = source.selectSingleNode("//PERSOON[@link=" + naam + "]");
 	var plaats;
+	var nodePersoon = source.selectSingleNode("//PERSOON[@link=" + naam + "]");
+
 	plaats = selectSingleNode(source,"EVENTS/BIRTH/@place",nodePersoon);
-   	if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'red'; indx ++; }}
+	indx = AddPlaatsPersoon(plaats, indx,'red');
 	plaats = selectSingleNode(source,"EVENTS/REGB/@place",nodePersoon);
-   	if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'red'; indx ++; }}
+	indx = AddPlaatsPersoon(plaats, indx,'red');
 	plaats = selectSingleNode(source,"EVENTS/BAPT/@place",nodePersoon);
-   	if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'red'; indx ++; }}
+	indx = AddPlaatsPersoon(plaats, indx,'red');
 	plaats = selectSingleNode(source,"EVENTS/DEATH/@place",nodePersoon);
-   	if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'red'; indx ++; }}
+	indx = AddPlaatsPersoon(plaats, indx,'red');
 	plaats = selectSingleNode(source,"EVENTS/REG/@place",nodePersoon);
-   	if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'red'; indx ++; }}
+	indx = AddPlaatsPersoon(plaats, indx,'red');
 	plaats = selectSingleNode(source,"EVENTS/BURI/@place",nodePersoon);
-   	if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'red'; indx ++; }}
+	indx = AddPlaatsPersoon(plaats, indx,'red');
+
 	var nodeRelations = selectSingleNode(source,"RELATIONS",nodePersoon);
 	if (nodeRelations != null)
 	{
 		var relations = nodeRelations.selectNodes("RELA");
    		if (relations != null)
    		{
-	   		for (i=0;i<relations.length;i++)
+	   		for (var i=0;i<relations.length;i++)
 	   		{
 				plaats = relations[i].selectSingleNode("BEGIN/@place");
-   				if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'red'; indx ++; }}
+				indx = AddPlaatsPersoon(plaats, indx,'red');
 				plaats = relations[i].selectSingleNode("MARL/@place");
-   				if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'red'; indx ++; }}
+				indx = AddPlaatsPersoon(plaats, indx,'red');
 				plaats = relations[i].selectSingleNode("MARC/@place");
-   				if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'red'; indx ++; }}
+				indx = AddPlaatsPersoon(plaats, indx,'red');
 				plaats = relations[i].selectSingleNode("END/@place");
-   				if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'red'; indx ++; }}
-				linkRelatie = relations[i].selectSingleNode("@link");
+				indx = AddPlaatsPersoon(plaats, indx,'red');
+
+				var linkRelatie = relations[i].selectSingleNode("@link");
 				if (linkRelatie != null)
 				{
 					var nodeRelatie = source.selectSingleNode("//PERSOON[@link=" + linkRelatie.nodeValue + "]");
 					if (nodeRelatie != null)
 					{
 						plaats = selectSingleNode(source,"EVENTS/BIRTH/@place",nodeRelatie);
-   						if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'blue'; indx ++; }}
+   						indx = AddPlaatsPersoon(plaats, indx,'blue');
 						plaats = selectSingleNode(source,"EVENTS/DEATH/@place",nodeRelatie);
-	   					if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'blue'; indx ++; }}
+   						indx = AddPlaatsPersoon(plaats, indx,'blue');
 					}
 				}
 	   		}
@@ -3396,9 +3296,9 @@ function HaalGegevensPersoonsplaatsen(naam)
 		if (nodeFather != null)
 		{
 			plaats = selectSingleNode(source,"EVENTS/BIRTH/@place",nodeFather);
-			if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'green'; indx ++; }}
+			indx = AddPlaatsPersoon(plaats, indx,'green');
 			plaats = selectSingleNode(source,"EVENTS/DEATH/@place",nodeFather);
-			if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'green'; indx ++; }}
+			indx = AddPlaatsPersoon(plaats, indx,'green');
 		}
 	}
 	var linkMother = selectSingleNode(source,"MOTHER/@link",nodePersoon);
@@ -3408,33 +3308,30 @@ function HaalGegevensPersoonsplaatsen(naam)
 		if (nodeMother != null)
 		{
 			plaats = selectSingleNode(source,"EVENTS/BIRTH/@place",nodeMother);
-			if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'green'; indx ++; }}
+			indx = AddPlaatsPersoon(plaats, indx,'green');
 			plaats = selectSingleNode(source,"EVENTS/DEATH/@place",nodeMother);
-			if (plaats != null) { if (VindPlaatsnaam(plaats.nodeValue,indx)) {persoon_plaatsen[indx] = plaats.nodeValue; persoon_kleur[indx] = 'green'; indx ++; }}
+			AddPlaatsPersoon(plaats, indx,'green');
 		}
 	}
 }
 
 function MaakKaartPersoon()
 {
-	var ilatmax = 0;
-	var ilatmin = 0;
-	var ilngmax = 0;
-	var ilngmin = 0;
 	var latmax = -1000;
 	var latmin = 1000;
 	var lngmax = -1000;
 	var lngmin = 1000;
 	var latlng = [];
+	var myLatlng;
 	for (var i = 0; i < persoon_plaatsen.length; i++)
 	{
-		if (lat[plaats_ind[i]] > latmax) {ilatmax = plaats_ind[i]; latmax = lat[plaats_ind[i]];}
-		if (lat[plaats_ind[i]] < latmin) {ilatmin = plaats_ind[i]; latmin = lat[plaats_ind[i]];}
-		if (lng[plaats_ind[i]] > lngmax) {ilngmax = plaats_ind[i]; lngmax = lng[plaats_ind[i]];}
-		if (lng[plaats_ind[i]] < lngmin) {ilngmin = plaats_ind[i]; lngmin = lng[plaats_ind[i]];}
+		if (lat[plaats_ind[i]] > latmax) {latmax = lat[plaats_ind[i]];}
+		if (lat[plaats_ind[i]] < latmin) {latmin = lat[plaats_ind[i]];}
+		if (lng[plaats_ind[i]] > lngmax) {lngmax = lng[plaats_ind[i]];}
+		if (lng[plaats_ind[i]] < lngmin) {lngmin = lng[plaats_ind[i]];}
 	}
-	if (persoon_plaatsen.length > 0) { var myLatlng = new google.maps.LatLng((latmin + latmax)/2,(lngmin + lngmax)/2); }
-	else { var myLatlng = new google.maps.LatLng(0,0); }
+	if (persoon_plaatsen.length > 0) { myLatlng = new google.maps.LatLng((latmin + latmax)/2,(lngmin + lngmax)/2); }
+	else { myLatlng = new google.maps.LatLng(0,0); }
 	var zoom = 1;
 	var marge = 0.05;
 	var latlngsw = new google.maps.LatLng(latmin - marge, lngmin - marge);
@@ -3457,12 +3354,12 @@ function MaakKaartPersoon()
 			);
 			var marker    = new google.maps.Marker({position: latlng[i], map: plaatsmap, title: persoon_plaatsen[i], icon:image});
 			gmarkers[i]   = marker;
-			(function(i, marker) {
+			(function(i) {
 				google.maps.event.addListener(gmarkers[i], 'click', function() {
 					var infowindow = new google.maps.InfoWindow({content: persoon_plaatsen[i]});
 					infowindow.open(plaatsmap, gmarkers[i]);
 					});
-				})(i, marker);
+				})(i);
 	}
 }
 
@@ -3473,8 +3370,8 @@ function VindPlaatsnaam(plaats,indx)
 		LaadKaartGegevens();
 		kaartGeladen = true;
 	}
-	j = 0;
-	found = false;
+	var j = 0;
+	var found = false;
 	while ((!found) && j < (plaatsen.length))
 	{
 		if (plaats == plaatsnaam[j])
@@ -3492,15 +3389,15 @@ function VindPlaatsnaam(plaats,indx)
 // =========================== Code voor vertalingen ===========================
 function Txt_aantal_beurten(taal)
 {
-	if (taal == 'nederlands') return "aantal beurten";
-	if (taal == 'engels') return "number of rounds";
-	if (taal == 'frans') return "nombre des tours";
+	if (taal == 'nederlands') return "Aantal beurten";
+	if (taal == 'engels') return "Number of rounds";
+	if (taal == 'frans') return "Nombre des tours";
 	if (taal == 'duits') return "Rundenzahl";
-	if (taal == 'fries') return "oantal beurten";
-	if (taal == 'noors') return "oantal svinger";
-	if (taal == 'spaans') return "número de rondas";
-	if (taal == 'italiaans') return "numero di giri";
-	if (taal == 'portugees') return "número de rodadas";
+	if (taal == 'fries') return "Oantal beurten";
+	if (taal == 'noors') return "Oantal svinger";
+	if (taal == 'spaans') return "Número de rondas";
+	if (taal == 'italiaans') return "Numero di giri";
+	if (taal == 'portugees') return "Número de rodadas";
 }
 function Txt_Alles_gevonden_in(taal)
 {

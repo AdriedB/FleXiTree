@@ -5,8 +5,8 @@
 		version="1.0">
 <!--
 // <author>Paul Kallenberg</author>
-// <file>$Workfile: Talen.xsl $</file><date>$Date: 15-01-15 8:20 $</date>
-// <revision>$Revision: 11 $</revision><release>1.0</release>
+// <file>$Workfile: Talen.xsl $</file><date>$Date: 2-10-16 18:21 $</date>
+// <revision>$Revision: 12 $</revision><release>1.0</release>
 // <disclaimer>This software may be used as long as this header stays intact.
 // No responsibility is accepted for use of this software.</disclaimer>
 -->
@@ -358,7 +358,7 @@
 <xsl:if test="$parTaal = 'frans'">Fait partie de</xsl:if>
 <xsl:if test="$parTaal = 'duits'">Gehörend zu</xsl:if>
 <xsl:if test="$parTaal = 'fries'">Behorend oan  </xsl:if>
-<xsl:if test="$parTaal = 'noors'">Tilhørighet til</xsl:if>
+<xsl:if test="$parTaal = 'noors'">Tilhørende</xsl:if>
 <xsl:if test="$parTaal = 'spaans'">La pertenencia a</xsl:if>
 <xsl:if test="$parTaal = 'italiaans'">Appartenente</xsl:if>
 <xsl:if test="$parTaal = 'portugees'">Pertencer a</xsl:if>
@@ -490,7 +490,7 @@
 <xsl:if test="$parTaal = 'frans'">à </xsl:if>
 <xsl:if test="$parTaal = 'duits'">bei </xsl:if>
 <xsl:if test="$parTaal = 'fries'">by </xsl:if>
-<xsl:if test="$parTaal = 'noors'">til </xsl:if>
+<xsl:if test="$parTaal = 'noors'">ved </xsl:if>
 <xsl:if test="$parTaal = 'spaans'">en </xsl:if>
 <xsl:if test="$parTaal = 'italiaans'">al </xsl:if>
 <xsl:if test="$parTaal = 'portugees'">no </xsl:if>
@@ -655,7 +655,7 @@
 <xsl:if test="$parTaal = 'frans'">pour </xsl:if>
 <xsl:if test="$parTaal = 'duits'">bei </xsl:if>
 <xsl:if test="$parTaal = 'fries'">om </xsl:if>
-<xsl:if test="$parTaal = 'noors'">til </xsl:if>
+<xsl:if test="$parTaal = 'noors'">ved </xsl:if>
 <xsl:if test="$parTaal = 'spaans'">en </xsl:if>
 <xsl:if test="$parTaal = 'italiaans'">a </xsl:if>
 <xsl:if test="$parTaal = 'portugees'">em </xsl:if>
@@ -930,7 +930,7 @@
 <xsl:if test="$parTaal = 'frans'">Une-colonne listes</xsl:if>
 <xsl:if test="$parTaal = 'duits'">Eine-Kolumne Listen</xsl:if>
 <xsl:if test="$parTaal = 'fries'">Eenkolomslijsten</xsl:if>
-<xsl:if test="$parTaal = 'noors'">Ett-kolonnelister</xsl:if>
+<xsl:if test="$parTaal = 'noors'">En koloms liste</xsl:if>
 <xsl:if test="$parTaal = 'spaans'">Listas de una columna</xsl:if>
 <xsl:if test="$parTaal = 'italiaans'">Elenchi One-colonna</xsl:if>
 <xsl:if test="$parTaal = 'portugees'">Listas de uma coluna</xsl:if>
@@ -1447,7 +1447,7 @@
 <xsl:if test="$parTaal = 'frans'">Totale</xsl:if>
 <xsl:if test="$parTaal = 'duits'">Gesamte</xsl:if>
 <xsl:if test="$parTaal = 'fries'">Hiele</xsl:if>
-<xsl:if test="$parTaal = 'noors'">Total</xsl:if>
+<xsl:if test="$parTaal = 'noors'">Hele alt sammen</xsl:if>
 <xsl:if test="$parTaal = 'spaans'">Todo</xsl:if>
 <xsl:if test="$parTaal = 'italiaans'">Tutto</xsl:if>
 <xsl:if test="$parTaal = 'portugees'">Todo</xsl:if>
@@ -1981,7 +1981,7 @@
 <xsl:if test="$parTaal = 'portugees'">em</xsl:if>
 </xsl:variable>
 <xsl:variable name="Txt_instellingniettewijzigen">
-<xsl:if test="$parTaal = 'nederlands'">Er is geen <xsl:value-of select="$Txt_instelling"/> die door U veranderd kunnen worden.<br />Klik op een van de vakjes in bovenstaande knoppenbalk om verder te gaan.</xsl:if>
+<xsl:if test="$parTaal = 'nederlands'">Er is geen <xsl:value-of select="$Txt_instelling"/> die door U veranderd kan worden.<br />Klik op een van de vakjes in bovenstaande knoppenbalk om verder te gaan.</xsl:if>
 <xsl:if test="$parTaal = 'engels'">You may not change any <xsl:value-of select="$Txt_instelling"/>.<br />Click any block in the upper menu bar to continue.</xsl:if>
 <xsl:if test="$parTaal = 'frans'">Vous ne pouvez pas modificer aucune <xsl:value-of select="$Txt_instelling"/>.<br />Cliquez un bloc en menu ci-dessus pour continuer.</xsl:if>
 <xsl:if test="$parTaal = 'duits'">Sie können keine <xsl:value-of select="$Txt_instelling"/> Ändern.<br />Bitte klicken Sie auf eines Fach in das Menü hier oben zum verfolgen.</xsl:if>
@@ -2800,7 +2800,7 @@
 <xsl:if test="$parTaal = 'frans'">Plusieurs-colonnes listes</xsl:if>
 <xsl:if test="$parTaal = 'duits'">Mehrere-Kolumne Listen</xsl:if>
 <xsl:if test="$parTaal = 'fries'">Meerkolomslijsten</xsl:if>
-<xsl:if test="$parTaal = 'noors'">Flere kolonnelister</xsl:if>
+<xsl:if test="$parTaal = 'noors'">Fler kolommers liste</xsl:if>
 <xsl:if test="$parTaal = 'spaans'">Más listas de las columnas</xsl:if>
 <xsl:if test="$parTaal = 'italiaans'">Più liste colonna</xsl:if>
 <xsl:if test="$parTaal = 'portugees'">Mais listas de coluna</xsl:if>
@@ -2964,7 +2964,7 @@
 <xsl:if test="$parTaal = 'engels'">Descendancy</xsl:if>
 <xsl:if test="$parTaal = 'frans'">Descendance</xsl:if>
 <xsl:if test="$parTaal = 'duits'">Nachkommen</xsl:if>
-<xsl:if test="$parTaal = 'fries'">Neiteam</xsl:if>
+<xsl:if test="$parTaal = 'fries'">Etterkommere</xsl:if>
 <xsl:if test="$parTaal = 'noors'">Avkom</xsl:if>
 <xsl:if test="$parTaal = 'spaans'">Descendientes</xsl:if>
 <xsl:if test="$parTaal = 'italiaans'">Discendenti</xsl:if>
@@ -2975,7 +2975,7 @@
 <xsl:if test="$parTaal = 'engels'">descendants</xsl:if>
 <xsl:if test="$parTaal = 'frans'">descendants</xsl:if>
 <xsl:if test="$parTaal = 'duits'">Nachkommen</xsl:if>
-<xsl:if test="$parTaal = 'fries'">neiteam</xsl:if>
+<xsl:if test="$parTaal = 'fries'">etterkommere</xsl:if>
 <xsl:if test="$parTaal = 'noors'">avkom</xsl:if>
 <xsl:if test="$parTaal = 'spaans'">descendientes</xsl:if>
 <xsl:if test="$parTaal = 'italiaans'">discendenti</xsl:if>
@@ -3053,7 +3053,7 @@
 <xsl:if test="$parTaal = 'frans'">Attention: Veuillez patienter pour une présentation contenant plusieurs générations. Pour une présentation de 10 générations ou plus, cela peut durer jusqu’à 15 minutes et au-delà.</xsl:if>
 <xsl:if test="$parTaal = 'duits'">Achtung: Die Produktion einer Liste vieler Generationen kann lang dauern. Das kann steigen bis 15 Minuten oder mehr wenn eine Liste von 10 oder mehr Generationen gemacht werden soll.</xsl:if>
 <xsl:if test="$parTaal = 'fries'">Tink derom: It genereren fan in oersjoch fan soad generaasjes kin lang duorren. Dit kin wol oplopen oant 15 minuten of mear as foar 10 of mear generaasjes in oersjoch makke moat wurde.  </xsl:if>
-<xsl:if test="$parTaal = 'noors'">Merk: Generere en liste over ofte kan vare i generasjoner. Dette kan ta opptil 15 minutter eller mer hvis 10 eller flere generasjoner bør være en uttalelse.</xsl:if>
+<xsl:if test="$parTaal = 'noors'">Merk: Å generere en liste over mange generasjoner kan ta lang tid. Dette kan ta opptil 15 minutter eller mer hvis det ønskes utarbeidet en oversikt over 10 eller flere generasjoner.</xsl:if>
 <xsl:if test="$parTaal = 'spaans'">Nota: La generación de una lista de frecuencia podría durar por generaciones. Esto puede tomar hasta 15 minutos o más si 10 o más generaciones deben ser una declaración.</xsl:if>
 <xsl:if test="$parTaal = 'italiaans'">Nota: Creazione di un elenco di frequente potrebbe durare per generazioni. Questo può richiedere fino a 15 minuti o più se 10 o più generazioni dovrebbe essere una dichiarazione.</xsl:if>
 <xsl:if test="$parTaal = 'portugees'">Nota: Gerando uma lista de freqüência poderia durar por gerações. Isso pode levar até 15 minutos ou mais, se 10 ou mais gerações deve ser uma declaração feita.</xsl:if>
@@ -3757,7 +3757,7 @@
 <xsl:if test="$parTaal = 'frans'">Descendance</xsl:if>
 <xsl:if test="$parTaal = 'duits'">Nachkommen</xsl:if>
 <xsl:if test="$parTaal = 'fries'">Neiteam</xsl:if>
-<xsl:if test="$parTaal = 'noors'">Avkom</xsl:if>
+<xsl:if test="$parTaal = 'noors'">Etterkommere</xsl:if>
 <xsl:if test="$parTaal = 'spaans'">Descendientes</xsl:if>
 <xsl:if test="$parTaal = 'italiaans'">Discendenti</xsl:if>
 <xsl:if test="$parTaal = 'portugees'">Descendentes</xsl:if>
@@ -3768,7 +3768,7 @@
 <xsl:if test="$parTaal = 'frans'">descendants</xsl:if>
 <xsl:if test="$parTaal = 'duits'">Nachkommen</xsl:if>
 <xsl:if test="$parTaal = 'fries'">neiteam</xsl:if>
-<xsl:if test="$parTaal = 'noors'">avkom</xsl:if>
+<xsl:if test="$parTaal = 'noors'">etterkommere</xsl:if>
 <xsl:if test="$parTaal = 'spaans'">descendientes</xsl:if>
 <xsl:if test="$parTaal = 'italiaans'">discendenti</xsl:if>
 <xsl:if test="$parTaal = 'portugees'">descendentes</xsl:if>
@@ -4692,7 +4692,7 @@
 <xsl:if test="$parTaal = 'frans'">Descendants abrégés</xsl:if>
 <xsl:if test="$parTaal = 'duits'">Abgekürzt Nachkommen</xsl:if>
 <xsl:if test="$parTaal = 'fries'">Ferkoart parenteel</xsl:if>
-<xsl:if test="$parTaal = 'noors'">Forkorte etterkommere</xsl:if>
+<xsl:if test="$parTaal = 'noors'">Kort etterkommerliste/xsl:if>
 <xsl:if test="$parTaal = 'spaans'">Descendientes compactos</xsl:if>
 <xsl:if test="$parTaal = 'italiaans'">Discendenti compatti</xsl:if>
 <xsl:if test="$parTaal = 'portugees'">Descendentes compact</xsl:if>
@@ -5165,7 +5165,7 @@
 <xsl:if test="$parTaal = 'frans'">Ordre d'affichage</xsl:if>
 <xsl:if test="$parTaal = 'duits'">Anzeige</xsl:if>
 <xsl:if test="$parTaal = 'fries'">Werjaan</xsl:if>
-<xsl:if test="$parTaal = 'noors'">Vis</xsl:if>
+<xsl:if test="$parTaal = 'noors'">Angivelse reproduksjon</xsl:if>
 <xsl:if test="$parTaal = 'spaans'">Vista</xsl:if>
 <xsl:if test="$parTaal = 'italiaans'">Vista</xsl:if>
 <xsl:if test="$parTaal = 'portugees'">Vista</xsl:if>
